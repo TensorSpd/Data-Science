@@ -54,9 +54,9 @@ This command will open the Jupyter notebook in your default web browser, allowin
 
 ## Licensing, Authors, Acknowledgements
 
-The data used in this project was acquired from the Inside Airbnb repository, providing publicly available Airbnb data for various cities.
-This project is part of the Data Scientist Nanodegree program offered by Udacity.
-For further information on the use of Udacity's platform and resources, please refer to the [Udacity Terms of Service](https://www.udacity.com/legal).
+* The data used in this project was acquired from the Inside Airbnb repository, providing publicly available Airbnb data for various cities.
+* This project is part of the Data Scientist Nanodegree program offered by Udacity.
+* For further information on the use of Udacity's platform and resources, please refer to the [Udacity Terms of Service](https://www.udacity.com/legal).
 
 
 
