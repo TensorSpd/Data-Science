@@ -7,6 +7,10 @@
     <list default="true" id="3b5bfe43-b35c-4841-a1f3-576b1e5547d9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/master.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/master.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/DisasterResponse.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/process_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/process_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/train_classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/train_classifier.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

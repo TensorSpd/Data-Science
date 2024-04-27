@@ -1,22 +1,26 @@
 # import libraries
 import sys
 import nltk
+import warnings
+
+# Suppress the warning
+warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 import pandas as pd
 
 import re
 from nltk.tokenize import word_tokenize
-from nltk.tokenize import sent_tokenize
 from nltk.stem import WordNetLemmatizer
 
 from sqlalchemy import create_engine
 
 from sklearn.model_selection import GridSearchCV
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
+
 from sklearn.multioutput import MultiOutputClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline, FeatureUnion
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.metrics import classification_report
 import joblib
@@ -59,37 +63,6 @@ def load_data(database_filepath):
     return X, Y, category_names
 
 
-class StartingVerbExtractor(BaseEstimator, TransformerMixin):
-    """Custom transformer to extract whether the starting word of a sentence is a verb."""
-
-    def starting_verb(self, text):
-        # Tokenize the text into sentences
-        sentence_list = nltk.sent_tokenize(text)
-
-        # Iterate through each sentence
-        for sentence in sentence_list:
-            tokens = tokenize(sentence)
-            if not tokens:  # Check if tokens list is empty
-                continue  # Skip empty sentences
-            pos_tags = nltk.pos_tag(tokens)
-            if not pos_tags:  # Check if pos_tags list is empty
-                continue  # Skip sentences with no pos_tags
-            first_word, first_tag = pos_tags[0]
-            if first_tag in ['VB', 'VBP']:
-                return True
-        return False
-
-    def fit(self, x, y=None):
-        """Fit method required for sklearn pipeline compatibility."""
-        return self
-
-    def transform(self, X):
-        """Transform method required for sklearn pipeline compatibility."""
-        # Apply the starting_verb function to each message in X
-        X_tagged = pd.Series(X).apply(self.starting_verb)
-        return pd.DataFrame(X_tagged)
-
-
 def tokenize(text):
     """
     Tokenize the input text by performing the following steps:
@@ -124,20 +97,20 @@ def build_model():
 
     # Define pipeline with feature union and classifier
     pipeline = Pipeline([
-        ('features', FeatureUnion([
-            ('text_pipeline', Pipeline([
-                ('vect', CountVectorizer(tokenizer=tokenize)),
-                ('tfidf', TfidfTransformer())
-            ])),
-            ('starting_verb', StartingVerbExtractor())
-        ])),
+        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
 
-    # Define parameters for grid search
+    # Define the parameters for grid search
     parameters = {
-        'clf__estimator__n_estimators': [50, 100, 200],
-        'clf__estimator__min_samples_leaf': [1, 2, 4]
+        'vect__max_features': [1000, 5000, 10000],  # Maximum number of features
+        'vect__ngram_range': [(1, 1), (1, 2)],  # Range of n-grams
+        'tfidf__use_idf': (True, False),  # Whether to use IDF or not
+        'clf__estimator__n_estimators': [50, 100],  # Number of trees in the forest
+        'clf__estimator__max_depth': [None, 10, 20],  # Maximum depth of the trees
+        'clf__estimator__min_samples_split': [2, 5],  # Minimum number of samples required to split a node
+        'clf__estimator__min_samples_leaf': [1, 2]  # Minimum number of samples required at each leaf node
     }
 
     # Create grid search object
