@@ -12,7 +12,6 @@ from nltk.stem import WordNetLemmatizer
 from sqlalchemy import create_engine
 
 from sklearn.model_selection import GridSearchCV
-from sklearn.naive_bayes import MultinomialNB
 
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -88,6 +87,12 @@ def tokenize(text):
     # Lemmatize each word and convert to lowercase
     clean_tokens = [lemmatizer.lemmatize(tok).lower().strip() for tok in tokens]
 
+    # Define stopwords
+    stop_words = set(['a', 'an', 'the', 'and', 'but', 'or', 'if', 'because', 'as', 'of'])
+
+    # Remove stopwords
+    clean_tokens = [tok for tok in tokens if tok.lower() not in stop_words]
+
     return clean_tokens
 
 
@@ -103,15 +108,9 @@ def build_model():
 
     # Define the parameters for grid search
     parameters = {
-        'vect__ngram_range': ((1, 1), (1, 2)),  # Range of n-grams
         'tfidf__norm': ['l2', 'l1'],  # Normalization method for TF-IDF vectors
-        'tfidf__use_idf': (True, False),  # Whether to enable inverse-document-frequency reweighing
-        'vect__max_df': (0.5, 0.75, 1.0),  # Ignore terms that have a document frequency higher than the given threshold
-        'vect__min_df': (1, 2, 5),  # Ignore terms that have a document frequency lower than the given threshold
         'clf__estimator__n_estimators': [50, 100, 200],  # Number of trees in the forest
-        'clf__estimator__min_samples_leaf': [1, 2],  # Minimum number of samples required at each leaf node
         'clf__estimator__max_depth': [None, 10, 20],  # Maximum depth of the tree
-        'clf__estimator__min_samples_split': [2, 5, 10],  # Minimum number of samples required to split an internal node
     }
 
     # Create grid search object
