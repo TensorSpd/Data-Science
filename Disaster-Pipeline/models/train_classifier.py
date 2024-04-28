@@ -3,9 +3,6 @@ import sys
 import nltk
 import warnings
 
-# Suppress the warning
-warnings.filterwarnings("ignore", category=RuntimeWarning)
-
 import pandas as pd
 
 import re
@@ -27,6 +24,8 @@ import joblib
 
 nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
 nltk.download('stopwords')
+# Suppress the warning
+warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 
 def load_data(database_filepath):
@@ -97,24 +96,26 @@ def build_model():
 
     # Define pipeline with feature union and classifier
     pipeline = Pipeline([
-        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('vect', CountVectorizer(tokenizer=tokenize, token_pattern=None)),
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
 
     # Define the parameters for grid search
     parameters = {
-        'vect__max_features': [1000, 5000, 10000],  # Maximum number of features
-        'vect__ngram_range': [(1, 1), (1, 2)],  # Range of n-grams
-        'tfidf__use_idf': (True, False),  # Whether to use IDF or not
-        'clf__estimator__n_estimators': [50, 100],  # Number of trees in the forest
-        'clf__estimator__max_depth': [None, 10, 20],  # Maximum depth of the trees
-        'clf__estimator__min_samples_split': [2, 5],  # Minimum number of samples required to split a node
-        'clf__estimator__min_samples_leaf': [1, 2]  # Minimum number of samples required at each leaf node
+        'vect__ngram_range': ((1, 1), (1, 2)),  # Range of n-grams
+        'tfidf__norm': ['l2', 'l1'],  # Normalization method for TF-IDF vectors
+        'tfidf__use_idf': (True, False),  # Whether to enable inverse-document-frequency reweighing
+        'vect__max_df': (0.5, 0.75, 1.0),  # Ignore terms that have a document frequency higher than the given threshold
+        'vect__min_df': (1, 2, 5),  # Ignore terms that have a document frequency lower than the given threshold
+        'clf__estimator__n_estimators': [50, 100, 200],  # Number of trees in the forest
+        'clf__estimator__min_samples_leaf': [1, 2],  # Minimum number of samples required at each leaf node
+        'clf__estimator__max_depth': [None, 10, 20],  # Maximum depth of the tree
+        'clf__estimator__min_samples_split': [2, 5, 10],  # Minimum number of samples required to split an internal node
     }
 
     # Create grid search object
-    cv = GridSearchCV(pipeline, param_grid=parameters)
+    cv = GridSearchCV(pipeline, param_grid=parameters, n_jobs=-1, verbose=2)
 
     return cv
 
