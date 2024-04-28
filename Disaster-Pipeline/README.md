@@ -1,5 +1,14 @@
 # Disaster Response Pipeline
 
+## Installations
+Ensure you have Python 3.X installed on your system. You can quickly set up the required libraries using pip:
+
+```bash
+pip install scikit-learn==1.2.1
+pip install pandas==1.5.3
+pip install flask==3.0.3
+```
+
 ## Project Overview
 
 This project focuses on building a disaster response pipeline to analyze messages and categorize them into different categories in order to aid emergency response teams during disasters. The pipeline consists of two main components: an ETL (Extract, Transform, Load) process to clean and preprocess the data, and a machine learning pipeline to train a model to classify messages.
