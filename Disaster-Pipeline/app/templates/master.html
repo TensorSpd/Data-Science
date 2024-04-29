@@ -63,6 +63,9 @@
 
     {% for id in ids %}
         <div id="{{id}}"></div>
+        {% if loop.index == 1 %}
+            <hr> <!-- Add horizontal line here -->
+        {% endif %}
     {% endfor %}
 </div>
 
