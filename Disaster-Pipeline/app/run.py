@@ -48,7 +48,7 @@ def index():
     # Extract the response categories (excluding the first four columns) from the DataFrame
     category = df[df.columns[4:]]
     # Count the occurrences of each response category
-    response_count = category.apply(lambda x: (x == 1).sum()).sort_values(ascending=False)[:10]
+    response_count = category.apply(lambda x: (x == 1).sum()).sort_values(ascending=False)[:12]
     # Get the names of the top 10 response categories
     category_cols = response_count.index.tolist()
 
