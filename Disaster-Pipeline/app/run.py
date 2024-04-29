@@ -7,10 +7,9 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Pie
 import joblib
 from sqlalchemy import create_engine
-
 
 app = Flask(__name__)
 
@@ -40,31 +39,65 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/index')
 def index():
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+
+    # Calculate the counts of messages for each genre
     genre_counts = df.groupby('genre').count()['message']
+    # Extract genre names from the index of genre_counts
     genre_names = list(genre_counts.index)
 
+    # Extract the response categories (excluding the first four columns) from the DataFrame
+    category = df[df.columns[4:]]
+    # Count the occurrences of each response category
+    response_count = category.apply(lambda x: (x == 1).sum()).sort_values(ascending=False)[:10]
+    # Get the names of the top 10 response categories
+    category_cols = response_count.index.tolist()
+
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
-                Bar(
-                    x=genre_names,
-                    y=genre_counts
+                Pie(
+                    labels=genre_names,  # genre names
+                    values=genre_counts,  # genre each class counts
                 )
             ],
 
             'layout': {
-                'title': 'Distribution of Message Genres',
+                'title': 'Distribution of Message Genres'
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=category_cols,
+                    y=response_count,
+                    marker=dict(
+                        color=['rgb(55, 83, 109)', 'rgb(100, 200, 150)', 'rgb(200, 100, 50)', 'rgb(150, 50, 200)',
+                               'rgb(50, 150, 200)', 'rgb(200, 50, 150)', 'rgb(100, 200, 50)', 'rgb(50, 100, 200)',
+                               'rgb(150, 200, 50)', 'rgb(200, 150, 100)', 'rgb(50, 100, 150)', 'rgb(150, 100, 50)'])
+                )
+            ],
+
+            'layout': {
+                'title': 'Top 12 Responses',
                 'yaxis': {
-                    'title': "Count"
+                    'title': "Count",
+                    'gridcolor': 'rgb(200, 200, 200)'  # Add gridlines
                 },
                 'xaxis': {
-                    'title': "Genre"
+                    'title': "Response",
+                    'tickangle': -45,  # Rotate x-axis labels for better readability
+                    'tickfont': dict(size=10)  # Adjust font size of x-axis labels
+                },
+                'plot_bgcolor': 'rgba(0, 0, 0, 0)',  # Make plot background transparent
+                'paper_bgcolor': 'rgba(0, 0, 0, 0)',  # Make paper background transparent
+                'font': {
+                    'color': 'rgb(100, 100, 100)',  # Change font color
+                    'size': 12  # Adjust font size
                 }
             }
         }
+
     ]
 
     # encode plotly graphs in JSON
