@@ -14,6 +14,7 @@ from sqlalchemy import create_engine
 from sklearn.model_selection import GridSearchCV
 
 from sklearn.multioutput import MultiOutputClassifier
+from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -55,6 +56,9 @@ def load_data(database_filepath):
     # Select only category columns using the mask
     Y = df.loc[:, mask]
 
+    # Drop the 'child_alone' column
+    Y.drop(columns=['child_alone'], inplace=True)
+
     # Extract category names
     category_names = list(Y.columns)
 
@@ -91,7 +95,7 @@ def tokenize(text):
     stop_words = set(['a', 'an', 'the', 'and', 'but', 'or', 'if', 'because', 'as', 'of'])
 
     # Remove stopwords
-    clean_tokens = [tok for tok in tokens if tok.lower() not in stop_words]
+    clean_tokens = [tok for tok in clean_tokens if tok.lower() not in stop_words]
 
     return clean_tokens
 
@@ -99,18 +103,18 @@ def tokenize(text):
 def build_model():
     """Builds and returns a GridSearchCV object for multi-output classification."""
 
-    # Define pipeline with feature union and classifier
+    # Modify the pipeline to use SVC instead of RandomForestClassifier
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize, token_pattern=None)),
         ('tfidf', TfidfTransformer()),
-        ('clf', MultiOutputClassifier(RandomForestClassifier()))
+        ('clf', MultiOutputClassifier(SVC()))
     ])
 
     # Define the parameters for grid search
     parameters = {
         'tfidf__norm': ['l2', 'l1'],  # Normalization method for TF-IDF vectors
-        'clf__estimator__n_estimators': [50, 100, 200],  # Number of trees in the forest
-        'clf__estimator__max_depth': [None, 10, 20],  # Maximum depth of the tree
+        'clf__estimator__C': [1, 10, 100],  # Regularization parameter
+        'clf__estimator__kernel': ['linear', 'rbf', 'poly']  # Kernel type
     }
 
     # Create grid search object
@@ -128,7 +132,7 @@ def evaluate_model(model, X_test, Y_test, category_names):
     # Print the metrics for each category
     for i, col in enumerate(category_names):
         print('{} category metrics: '.format(col))
-        print(classification_report(Y_test.iloc[:, i], y_pred[:, i]))
+        print(classification_report(Y_test.iloc[:, i], y_pred[:, i], zero_division=1))
 
 
 def save_model(model, model_filepath):

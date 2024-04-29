@@ -2,5 +2,4 @@
 Disaster-Pipeline/*.idea
 .DS_Store
 Disaster-Pipeline/.idea
-Disaster-Pipeline/models/classifier.pkl
 Disaster-Pipeline/.DS_Store
