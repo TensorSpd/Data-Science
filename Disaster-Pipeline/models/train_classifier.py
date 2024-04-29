@@ -15,7 +15,6 @@ from sklearn.model_selection import GridSearchCV
 
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -89,13 +88,15 @@ def tokenize(text):
     lemmatizer = WordNetLemmatizer()
 
     # Lemmatize each word and convert to lowercase
-    clean_tokens = [lemmatizer.lemmatize(tok).lower().strip() for tok in tokens]
+    clean_tokens = [lemmatizer.lemmatize(
+        tok).lower().strip() for tok in tokens]
 
     # Define stopwords
-    stop_words = set(['a', 'an', 'the', 'and', 'but', 'or', 'if', 'because', 'as', 'of'])
+    stop_words = {'a', 'an', 'the', 'and', 'but', 'or', 'if', 'because', 'as', 'of'}
 
     # Remove stopwords
-    clean_tokens = [tok for tok in clean_tokens if tok.lower() not in stop_words]
+    clean_tokens = [tok for tok in clean_tokens if tok.lower()
+                    not in stop_words]
 
     return clean_tokens
 
@@ -123,16 +124,17 @@ def build_model():
     return cv
 
 
-def evaluate_model(model, X_test, Y_test, category_names):
+def evaluate_model(model, x_test, y_test, category_names):
     """Prints the evaluation metrics for the model."""
 
     # Predict labels
-    y_pred = model.predict(X_test)
+    y_pred = model.predict(x_test)
 
     # Print the metrics for each category
     for i, col in enumerate(category_names):
         print('{} category metrics: '.format(col))
-        print(classification_report(Y_test.iloc[:, i], y_pred[:, i], zero_division=1))
+        print(classification_report(
+            y_test.iloc[:, i], y_pred[:, i], zero_division=1))
 
 
 def save_model(model, model_filepath):
@@ -155,7 +157,8 @@ def main():
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+        X_train, X_test, Y_train, Y_test = train_test_split(
+            X, Y, test_size=0.2)
 
         print('Building model...')
         model = build_model()
@@ -172,9 +175,9 @@ def main():
         print('Trained model saved!')
 
     else:
-        print('Please provide the filepath of the disaster messages database ' \
-              'as the first argument and the filepath of the pickle file to ' \
-              'save the model to as the second argument. \n\nExample: python ' \
+        print('Please provide the filepath of the disaster messages database '
+              'as the first argument and the filepath of the pickle file to '
+              'save the model to as the second argument. \n\nExample: python '
               'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
 
 

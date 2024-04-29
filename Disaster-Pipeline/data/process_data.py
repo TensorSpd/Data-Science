@@ -81,7 +81,7 @@ def save_data(df, database_filename):
         None
     """
     engine = create_engine(f'sqlite:///{database_filename}')
-    df.to_sql('DisasterResponse', engine, index=False)
+    df.to_sql('DisasterResponse', engine, index=False, if_exists='replace')
 
 
 def main():
@@ -102,11 +102,11 @@ def main():
         print('Cleaned data saved to database!')
 
     else:
-        print('Please provide the filepaths of the messages and categories ' \
-              'datasets as the first and second argument respectively, as ' \
-              'well as the filepath of the database to save the cleaned data ' \
-              'to as the third argument. \n\nExample: python process_data.py ' \
-              'disaster_messages.csv disaster_categories.csv ' \
+        print('Please provide the filepaths of the messages and categories '
+              'datasets as the first and second argument respectively, as '
+              'well as the filepath of the database to save the cleaned data '
+              'to as the third argument. \n\nExample: python process_data.py '
+              'disaster_messages.csv disaster_categories.csv '
               'DisasterResponse.db')
 
 
