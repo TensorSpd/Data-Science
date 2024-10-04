@@ -23,7 +23,7 @@ Welcome to my Data Science Portfolio! This repository showcases three comprehens
 
 ---
 
-### **2. [Disaster Response Pipeline]([https://github.com/yourusername/disaster-response-pipeline](https://github.com/TensorSpd/Data-Science/tree/main/Disaster-Pipeline))**
+### **2. [Disaster Response Pipeline](https://github.com/TensorSpd/Data-Science/tree/main/Disaster-Pipeline)**
 
 - **Motivation**: This project involves building a machine learning pipeline to classify disaster-related messages into categories that could assist emergency response teams. The project applies Natural Language Processing (NLP) to streamline communication during disaster situations.
 
