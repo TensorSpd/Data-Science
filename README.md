@@ -4,7 +4,7 @@ Welcome to my Data Science Portfolio! This repository showcases three comprehens
 
 ## **Projects**
 
-### **1. [Rio de Janeiro Airbnb Activity (2023 and 2018)](https://medium.com/@sahanipradeep5529/dreaming-of-rio-1a9b7e92b54e)**
+### **1. [Rio de Janeiro Airbnb Activity (2023 and 2018)](https://github.com/TensorSpd/Data-Science/tree/main/blog-post-project)**
 
 - **Motivation**: This project focuses on exploring Airbnb listings in Rio de Janeiro, analyzing pricing trends, availability, and neighborhood attractiveness. The project compares datasets from 2018 and 2023 to derive insights for travelers and hosts.
   
@@ -23,7 +23,7 @@ Welcome to my Data Science Portfolio! This repository showcases three comprehens
 
 ---
 
-### **2. [Disaster Response Pipeline](https://github.com/yourusername/disaster-response-pipeline)**
+### **2. [Disaster Response Pipeline]([https://github.com/yourusername/disaster-response-pipeline](https://github.com/TensorSpd/Data-Science/tree/main/Disaster-Pipeline))**
 
 - **Motivation**: This project involves building a machine learning pipeline to classify disaster-related messages into categories that could assist emergency response teams. The project applies Natural Language Processing (NLP) to streamline communication during disaster situations.
 
@@ -40,7 +40,7 @@ Welcome to my Data Science Portfolio! This repository showcases three comprehens
 
 ---
 
-### **3. [Arvato - Customer Segmentation and Predictive Modeling for Mail-Order Campaign](https://medium.com/@sahanipradeep5529/leveraging-data-science-for-targeted-marketing-insights-from-arvatos-customer-segmentation-31a688ca58dd)**
+### **3. [Arvato - Customer Segmentation and Predictive Modeling for Mail-Order Campaign](https://github.com/TensorSpd/Data-Science/tree/main/Arvato_Project)**
 
 - **Motivation**: This capstone project for Arvato Financial Services focuses on customer segmentation and predictive modeling for targeted marketing campaigns. By analyzing demographic data, the goal is to identify high-value customers for future marketing efforts.
 
