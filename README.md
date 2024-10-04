@@ -89,8 +89,7 @@ python run.py
 jupyter notebook Arvato_Project.ipynb
 ```
 
-##**Key Learnings and Techniques**
-Throughout these projects, key skills developed include:
+## **Key Learnings and Techniques**
 
 - **Data Wrangling:** Cleaning and transforming data for machine learning models.
 - **Exploratory Data Analysis (EDA):** Visualizing and interpreting trends and insights from data.
